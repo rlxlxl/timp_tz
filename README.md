@@ -100,6 +100,7 @@ src/
 ├── components/           # React компоненты
 ├── lib/                  # Утилиты (auth, rbac, prisma)
 └── generated/prisma/     # Сгенерированный Prisma клиент
+└── images                # Скриншоты 
 ```
 
 ## Скрипты
