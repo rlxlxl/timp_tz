@@ -1,36 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Система управления аудитами
 
-## Getting Started
+Веб-приложение для управления результатами аудитов безопасности и compliance.
 
-First, run the development server:
+## Технологии
+
+- **Frontend**: Next.js 16 (App Router), React 19, Tailwind CSS 4
+- **Backend**: Next.js API Routes
+- **Database**: SQLite через Prisma ORM
+- **Charts**: Recharts
+
+## Функциональность
+
+### Аутентификация
+- Регистрация пользователей
+- Вход в систему
+- Управление сессиями через cookies
+- RBAC (Role-Based Access Control)
+
+### Роли пользователей
+| Роль | Описание |
+|------|----------|
+| Admin | Полный доступ |
+| AnalystL3 | Изменение критичности и статуса |
+| AnalystL2 | Изменение статуса |
+| AnalystL1 | Только просмотр |
+
+### Аудиты
+- Создание и просмотр результатов аудитов
+- Фильтрация по статусу, критичности, системе, ответственному
+- Поиск по названию, описанию, системе, категории
+- Пагинация
+- История изменений
+- Комментарии
+
+### Калькуляторы
+- **Compliance Calculator** - расчёт соответствия
+- **Risk Calculator** - расчёт рисков
+- **SLA Calculator** - расчёт SLA
+
+### Статистика
+- Распределение по критичности
+- Распределение по статусу
+- Распределение по системам
+- Тimeline по месяцам
+
+## Установка и запуск
 
 ```bash
+# Установка зависимостей
+npm install
+
+# Генерация Prisma клиента
+npm run db:generate
+
+# Применение миграций
+npm run db:push
+
+# Заполнение БД тестовыми данными
+npm run seed
+
+# Запуск dev сервера
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Переменные окружения
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Создайте файл `.env`:
+```env
+AUTH_SECRET=your_secret_key
+DATABASE_URL="file:./dev.db"
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Структура проекта
 
-## Learn More
+```
+src/
+├── app/
+│   ├── api/              # API Routes
+│   │   ├── auth/         # Аутентификация
+│   │   ├── audit-results/  # Управление аудитами
+│   │   ├── audit-stats/    # Статистика
+│   │   └── users/          # Управление пользователями
+│   ├── login/            # Страница входа
+│   ├── register/         # Страница регистрации
+│   ├── dashboard/       # Дашборд
+│   ├── audit-results/    # Страницы аудитов
+│   ├── calculators/      # Калькуляторы
+│   └── users/            # Управление пользователями
+├── components/           # React компоненты
+├── lib/                  # Утилиты (auth, rbac, prisma)
+└── generated/prisma/     # Сгенерированный Prisma клиент
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Скрипты
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Команда | Описание |
+|---------|----------|
+| `npm run dev` | Запуск dev сервера |
+| `npm run build` | Production сборка |
+| `npm run start` | Запуск production сервера |
+| `npm run lint` | Проверка линтером |
+| `npm run db:push` | Применение миграций |
+| `npm run db:generate` | Генерация Prisma клиента |
+| `npm run seed` | Заполнение БД данными |

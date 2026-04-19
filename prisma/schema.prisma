@@ -1,0 +1,84 @@
+// Prisma schema for the audit results service.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum Role {
+  Admin
+  AnalystL1
+  AnalystL2
+  AnalystL3
+}
+
+enum AuditStatus {
+  New
+  InProgress
+  Resolved
+  Closed
+}
+
+enum Criticality {
+  Low
+  Medium
+  High
+  Critical
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  email        String        @unique
+  name         String
+  passwordHash String?
+  role         Role          @default(AnalystL1)
+  auditResults AuditResult[] @relation("assignedAnalyst")
+  comments     Comment[]
+  actions      AuditHistory[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model AuditResult {
+  id             Int            @id @default(autoincrement())
+  title          String
+  system         String
+  category       String
+  description    String
+  criticality    Criticality
+  status         AuditStatus    @default(New)
+  responsible    User?          @relation("assignedAnalyst", fields: [responsibleId], references: [id])
+  responsibleId  Int?
+  foundAt        DateTime
+  dueAt          DateTime?
+  riskScore      Float
+  comments       Comment[]
+  history        AuditHistory[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+model Comment {
+  id            Int         @id @default(autoincrement())
+  text          String
+  author        User        @relation(fields: [authorId], references: [id])
+  authorId      Int
+  auditResult   AuditResult @relation(fields: [auditResultId], references: [id])
+  auditResultId Int
+  createdAt     DateTime    @default(now())
+}
+
+model AuditHistory {
+  id            Int         @id @default(autoincrement())
+  action        String
+  details       String?
+  performedBy   User        @relation(fields: [performedById], references: [id])
+  performedById Int
+  auditResult   AuditResult @relation(fields: [auditResultId], references: [id])
+  auditResultId Int
+  createdAt     DateTime    @default(now())
+}
