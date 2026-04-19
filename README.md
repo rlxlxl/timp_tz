@@ -25,6 +25,16 @@
 | AnalystL2 | Изменение статуса |
 | AnalystL1 | Только просмотр |
 
+### Данные для входа
+| email | password |
+|------|----------|
+| admin@example.com | password123 |
+| analyst3@example.com | password123  |
+| analyst2@example.com | password123  |
+| analyst1@example.com | password123 |
+
+Или можете зарегестрироваться
+
 ### Аудиты
 - Создание и просмотр результатов аудитов
 - Фильтрация по статусу, критичности, системе, ответственному
